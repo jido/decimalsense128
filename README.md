@@ -129,4 +129,4 @@ If the sign bit of **word 2** is not set:
  * Exponent becomes _-8192_
  * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,99e32_ (non-zero mantissa)
  
-Multiply `h` by _1e15_ to get the value of the mantissa
+Multiply `h` by _1e15_ to read the actual value of the mantissa
