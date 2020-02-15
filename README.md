@@ -11,7 +11,7 @@ Numbers
 
 Normal number range, 34 significant digits:
 
-**1.0e-8192** to **9.99...99e+8191**
+**1.0e-8191** to **9.99...99e+8191**
 
 (hexadecimal _314D C6448D93 38C15B0A 00000000_ to _7FFDED09 BEAD87C0 378D8E63 FFFFFFFF_)
 
@@ -27,11 +27,11 @@ Zero:
 
 One:
 
-> hexadecimal _4002314D C6448D93 38C15B0A 00000000_
+> hexadecimal _3FFE314D C6448D93 38C15B0A 00000000_
 
 Ten:
 
-> hexadecimal _4004314D C6448D93 38C15B0A 00000000_
+> hexadecimal _4000314D C6448D93 38C15B0A 00000000_
 
 Infinity:
 
@@ -62,7 +62,7 @@ mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm
    `m` = 113-bit mantissa
 
  * If `e` and the first 49 bits of `m` are all 0 then it is a subnormal number
- * If `e` and the first bit of `m` are all 1 then it is an _Infinity_ or _NaN_
+ * If `e` is all 1 and the first bit of `m` is 1 then it is an _Infinity_ or _NaN_
 
 For platforms that don't natively support 128 bit quantities, an alternative format can be used - [see below](#alternative-format).
 
@@ -77,18 +77,19 @@ Take _8191_ away from the 14-bit exponent value to read the actual exponent
 Subnormal numbers
 -----------------
 
-Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _999,999,999,999,999_;
+Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999_;
 
 Their exponent is _-8177_; the mantissa encodes numbers between 0.0 and 1.0 with a lower precision (between 1 and 19 significant digits.)
 
 Alternative Format
 ==================
 
-This is intended for easy conversion between decimalsense numbers and decimal representation on platforms without 128 bit number support. This alternative format is _not_ monotonic but the uniqueness of number representation is preserved.
+This is intended for easy conversion between decimalsense numbers and decimal representation on platforms without 128 bit number support.
+This alternative format is _not_ monotonic but the uniqueness of number representation is preserved.
 
 ~~~
-shhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
-llllllll llllllll lleeeeee eeeeeeee
+shhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
+llllllll llllllll llllllll llllllll llllllll llllllll lleeeeee eeeeeeee
 ~~~
 
 **Word 1:**
@@ -104,7 +105,7 @@ llllllll llllllll lleeeeee eeeeeeee
    `e` = 14-bit exponent
 
 * If the first 15 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
-* Otherwise, if **word 2** is 0 or 1 then it is a subnormal number
+* Otherwise, if **word 2** value is 0 or hexadecimal _80000000 00000000_ then it is a subnormal number
 
 Normal numbers
 --------------
@@ -121,9 +122,9 @@ Add `l` to fill in the last 15 digits of the mantissa
 Subnormal numbers
 -----------------
 
-If the exponent is **1**, then the format is same as normal numbers but with reduced precision (`l` is empty)
+If the sign bit of **word 2** is set, then the format is equivalent to normal numbers but with reduced precision (value of `l` is 0)
 
-If the exponent is **0**:
+If the sign bit of **word 2** is not set:
 
  * Exponent becomes _-8191_
  * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,999e32_
