@@ -126,7 +126,7 @@ If the sign bit of **word 2** is set, then the format is equivalent to normal nu
 
 If the sign bit of **word 2** is not set:
 
- * Exponent becomes _-8191_
- * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,999e32_
+ * Exponent becomes _-8192_
+ * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,99e32_ (non-zero mantissa)
  
 Multiply `h` by _1e15_ to get the value of the mantissa
