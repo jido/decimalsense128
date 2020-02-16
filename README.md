@@ -126,18 +126,18 @@ Multiply `h` by _1e16_ then add _1e34_ to get the first 19 digits of the mantiss
 
 Add `l` to fill in the last 16 digits of the mantissa
 
-Example:
+Examples:
 
 > One = hexadecimal
 > ~~~
 > 00000000 00000000
-> 00000000 000001FF
+> 00000000 00000200
 > ~~~
 >
 > Two = hexadecimal
 > ~~~
 > 0DE0B6B3 A7640000
-> 00000000 000001FF
+> 00000000 00000200
 > ~~~
 
 Subnormal numbers
