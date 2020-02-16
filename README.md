@@ -47,6 +47,8 @@ Not a Number (NaN) can have several representations.
 
 According to IEEE, positive and negative zero are equal which is the only exception to unique number representation.
 
+----
+
 Format
 ======
 
@@ -83,6 +85,8 @@ Subnormal numbers
 Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999_;
 
 Multiply `m` by _1e15_ to read the actual mantissa value
+
+----
 
 Alternative Format
 ==================
