@@ -105,7 +105,7 @@ llllllll llllllll llllllll llllllll llllllll llllllll lleeeeee eeeeeeee
    `e` = 14-bit exponent
 
 * If the first 15 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
-* Otherwise, if **word 2** value is 0 or hexadecimal _80000000 00000000_ then it is a subnormal number
+* Otherwise, if `e` is all 0 then it is a subnormal number (**word 2** value is 0 or hexadecimal _80000000 00000000_)
 
 Normal numbers
 --------------
@@ -122,11 +122,7 @@ Add `l` to fill in the last 15 digits of the mantissa
 Subnormal numbers
 -----------------
 
-If the sign bit of **word 2** is set, then the format is equivalent to normal numbers but with reduced precision (value of `l` is 0)
-
-If the sign bit of **word 2** is not set:
-
  * Exponent becomes _-8192_
  * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,99e32_ (non-zero mantissa)
- 
-Multiply `h` by _1e15_ to read the actual value of the mantissa
+
+Add the value of **word 2** to `h` then multiply the result by _1e15_ to read the actual value of the mantissa
