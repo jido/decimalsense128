@@ -11,13 +11,13 @@ Numbers
 
 Normal number range, 35 significant digits:
 
-**1.0e-511** to **9.99...99e+511**
+**1.0e-512** to **9.99...99e+511**
 
-(hexadecimal _11ED09 BEAD87C0 378D8E64 00000000_ to _7FF34261 72C74D82 2B878FE7 FFFFFFFF_)
+(hexadecimal _1ED09 BEAD87C0 378D8E64 00000000_ to _7FF34261 72C74D82 2B878FE7 FFFFFFFF_)
 
 Subnormal number range (non-zero, between 1 and 19 significant digits):
 
-**1.0e-530** to **9.999,999,999,999,999,999e-512**
+**1.0e-531** to **9.999,999,999,999,999,999e-513**
 
 (hexadecimal _1_ to _8AC72304 89E7FFFF_)
 
@@ -84,7 +84,7 @@ Subnormal numbers
 
 Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999_;
 
-Multiply `m` by _1e16_ to read the actual mantissa value
+Multiply `m` by _1e15_ to read the actual mantissa value
 
 ----
 
@@ -96,7 +96,7 @@ This alternative format is _not_ monotonic but the uniqueness of number represen
 
 ~~~
 shhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
-llllllll llllllll llllllll llllllll llllllll llllllll llllllee eeeeeeee
+eeeeeeee eellllll llllllll llllllll llllllll llllllll llllllll llllllll
 ~~~
 
 **Word 1:**
@@ -106,13 +106,14 @@ llllllll llllllll llllllll llllllll llllllll llllllll llllllee eeeeeeee
    `h` = 63 bits for the first 19 decimal digits of mantissa
 
 **Word 2:**
-
-   `l` = 54 bits for the last 16 decimal digits of mantissa
    
    `e` = 10-bit exponent
 
+   `l` = 54 bits for the last 16 decimal digits of mantissa
+
 * If the first 15 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
-* Otherwise, if `e` is all 0 then it is a subnormal number (**word 2** value is 0 or hexadecimal _80000000 00000000_)
+* If `e` is all 0 and the first two bits of `l` are 1 then it is a subnormal number
+(**word 2** value is hexadecimal _300000 00000000_ or _310000 00000000_)
 
 Normal numbers
 --------------
@@ -131,19 +132,19 @@ Examples:
 > One = hexadecimal
 > ~~~
 > 00000000 00000000
-> 00000000 00000200
+> 80000000 00000000
 > ~~~
 >
 > Two = hexadecimal
 > ~~~
 > 0DE0B6B3 A7640000
-> 00000000 00000200
+> 80000000 00000000
 > ~~~
 
 Subnormal numbers
 -----------------
 
- * Exponent becomes _-512_
- * Mantissa goes from _10,000,000,000,000,000_ to _9.999,999,999,999,999,999e34_ (non-zero mantissa)
+ * Exponent is _-512_
+ * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,999e33_ (non-zero mantissa)
 
-Add the value of **word 2** to `h` then multiply the result by _1e16_ to read the actual value of the mantissa
+Copy bit 48 of **word 2** into bit 63 of **word 1** then multiply **word 1** by _1e15_ to read the actual value of the mantissa
