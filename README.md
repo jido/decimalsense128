@@ -15,7 +15,7 @@ Normal number range, 34 significant digits:
 
 (hexadecimal _314D C6448D93 38C15B0A 00000000_ to _7FFDED09 BEAD87C0 378D8E63 FFFFFFFF_)
 
-Subnormal number range (non-zero, variable precision):
+Subnormal number range (non-zero, between 1 and 19 significant digits):
 
 **1.0e-8211** to **9.999,999,999,999,999,999e-8192**
 
@@ -77,9 +77,12 @@ Take _8191_ away from the 14-bit exponent value to read the actual exponent
 Subnormal numbers
 -----------------
 
-Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999_;
+ * Exponent is _-8192_
+ * The mantissa encodes numbers between 0.0 and 1.0 with a lower precision
 
-Their exponent is _-8177_; the mantissa encodes numbers between 0.0 and 1.0 with a lower precision (between 1 and 19 significant digits.)
+Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999_;
+
+Multiply `m` by _1e15_ to read the actual mantissa value
 
 Alternative Format
 ==================
@@ -123,6 +126,6 @@ Subnormal numbers
 -----------------
 
  * Exponent becomes _-8192_
- * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,99e32_ (non-zero mantissa)
+ * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,999e33_ (non-zero mantissa)
 
 Add the value of **word 2** to `h` then multiply the result by _1e15_ to read the actual value of the mantissa
