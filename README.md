@@ -13,7 +13,7 @@ Normal number range, 35 significant digits:
 
 **1.0e-511** to **9.99...99e+511**
 
-(hexadecimal _1ED09 BEAD87C0 378D8E64 00000000_ to _7FD34261 72C74D82 2B878FE7 FFFFFFFF_)
+(hexadecimal _11ED09 BEAD87C0 378D8E64 00000000_ to _7FF34261 72C74D82 2B878FE7 FFFFFFFF_)
 
 Subnormal number range (non-zero, between 1 and 19 significant digits):
 
@@ -27,11 +27,11 @@ Zero:
 
 One:
 
-> hexadecimal _3FE1ED09 BEAD87C0 378D8E64 00000000_
+> hexadecimal _4001ED09 BEAD87C0 378D8E64 00000000_
 
 Ten:
 
-> hexadecimal _4001ED09 BEAD87C0 378D8E64 00000000_
+> hexadecimal _4021ED09 BEAD87C0 378D8E64 00000000_
 
 Infinity:
 
@@ -71,10 +71,10 @@ For platforms that don't natively support 128 bit quantities, an alternative for
 Normal numbers
 --------------
 
- * Exponent is offset by 511
+ * Exponent is offset by 512
  * The mantissa is normalised, it goes from _1e34_ to _9.99...99e34_
 
-Take _511_ away from the 10-bit exponent value to read the actual exponent
+Take _512_ away from the 10-bit exponent value to read the actual exponent
 
 Subnormal numbers
 -----------------
