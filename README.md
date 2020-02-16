@@ -9,15 +9,15 @@ This is an attempt at making a decimal number format similar to decimal128, but 
 Numbers
 =======
 
-Normal number range, 34 significant digits:
+Normal number range, 35 significant digits:
 
-**1.0e-8191** to **9.99...99e+8191**
+**1.0e-511** to **9.99...99e+511**
 
-(hexadecimal _314D C6448D93 38C15B0A 00000000_ to _7FFDED09 BEAD87C0 378D8E63 FFFFFFFF_)
+(hexadecimal _1ED09 BEAD87C0 378D8E64 00000000_ to _7FD34261 72C74D82 2B878FE7 FFFFFFFF_)
 
 Subnormal number range (non-zero, between 1 and 19 significant digits):
 
-**1.0e-8210** to **9.999,999,999,999,999,999e-8192**
+**1.0e-530** to **9.999,999,999,999,999,999e-512**
 
 (hexadecimal _1_ to _8AC72304 89E7FFFF_)
 
@@ -27,11 +27,11 @@ Zero:
 
 One:
 
-> hexadecimal _3FFE314D C6448D93 38C15B0A 00000000_
+> hexadecimal _3FE1ED09 BEAD87C0 378D8E64 00000000_
 
 Ten:
 
-> hexadecimal _4000314D C6448D93 38C15B0A 00000000_
+> hexadecimal _4001ED09 BEAD87C0 378D8E64 00000000_
 
 Infinity:
 
@@ -53,38 +53,38 @@ Format
 ======
 
 ~~~
-seeeeeee eeeeeeem mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm
+seeeeeee eeemmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm
 mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm
 ~~~
 
    `s` = sign bit
    
-   `e` = 14-bit exponent
+   `e` = 10-bit exponent
    
-   `m` = 113-bit mantissa
+   `m` = 117-bit mantissa
 
- * If `e` and the first 49 bits of `m` are all 0 then it is a subnormal number
- * If `e` is all 1 and the first bit of `m` is 1 then it is an _Infinity_ or _NaN_
+ * If `e` and the first 53 bits of `m` are all 0 then it is a subnormal number
+ * If `e` and the first 5 bits of `m` are all 1 then it is an _Infinity_ or _NaN_
 
 For platforms that don't natively support 128 bit quantities, an alternative format can be used - [see below](#alternative-format).
 
 Normal numbers
 --------------
 
- * Exponent is offset by 8191
- * The mantissa is normalised, it goes from _1e33_ to _9.99...99e33_
+ * Exponent is offset by 511
+ * The mantissa is normalised, it goes from _1e34_ to _9.99...99e34_
 
-Take _8191_ away from the 14-bit exponent value to read the actual exponent
+Take _511_ away from the 10-bit exponent value to read the actual exponent
 
 Subnormal numbers
 -----------------
 
- * Exponent is _-8192_
+ * Exponent is _-512_
  * The mantissa encodes numbers between 0.0 and 1.0 with a lower precision
 
 Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999_;
 
-Multiply `m` by _1e15_ to read the actual mantissa value
+Multiply `m` by _1e16_ to read the actual mantissa value
 
 ----
 
@@ -96,7 +96,7 @@ This alternative format is _not_ monotonic but the uniqueness of number represen
 
 ~~~
 shhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
-llllllll llllllll llllllll llllllll llllllll llllllll lleeeeee eeeeeeee
+llllllll llllllll llllllll llllllll llllllll llllllll llllllee eeeeeeee
 ~~~
 
 **Word 1:**
@@ -107,9 +107,9 @@ llllllll llllllll llllllll llllllll llllllll llllllll lleeeeee eeeeeeee
 
 **Word 2:**
 
-   `l` = 50 bits for the last 15 decimal digits of mantissa
+   `l` = 54 bits for the last 16 decimal digits of mantissa
    
-   `e` = 14-bit exponent
+   `e` = 10-bit exponent
 
 * If the first 15 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
 * Otherwise, if `e` is all 0 then it is a subnormal number (**word 2** value is 0 or hexadecimal _80000000 00000000_)
@@ -117,19 +117,33 @@ llllllll llllllll llllllll llllllll llllllll llllllll lleeeeee eeeeeeee
 Normal numbers
 --------------
 
- * Exponent is offset by _8192_
- * The mantissa is normalised, it goes from _1e33_ to _9.99...99e33_
+ * Exponent is offset by _512_
+ * The mantissa is normalised, it goes from _1e34_ to _9.99...99e34_
 
-Take _8192_ away from the 14-bit exponent value to read the actual exponent;
+Take _512_ away from the 10-bit exponent value to read the actual exponent;
 
-Multiply `h` by _1e15_ then add _1e33_ to get the first 19 digits of the mantissa;
+Multiply `h` by _1e16_ then add _1e34_ to get the first 19 digits of the mantissa;
 
-Add `l` to fill in the last 15 digits of the mantissa
+Add `l` to fill in the last 16 digits of the mantissa
+
+Example:
+
+> One = hexadecimal
+> ~~~
+> 00000000 00000000
+> 00000000 000001FF
+> ~~~
+>
+> Two = hexadecimal
+> ~~~
+> 0DE0B6B3 A7640000
+> 00000000 000001FF
+> ~~~
 
 Subnormal numbers
 -----------------
 
- * Exponent becomes _-8192_
- * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,999e33_ (non-zero mantissa)
+ * Exponent becomes _-512_
+ * Mantissa goes from _10,000,000,000,000,000_ to _9.999,999,999,999,999,999e34_ (non-zero mantissa)
 
-Add the value of **word 2** to `h` then multiply the result by _1e15_ to read the actual value of the mantissa
+Add the value of **word 2** to `h` then multiply the result by _1e16_ to read the actual value of the mantissa
