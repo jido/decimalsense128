@@ -17,7 +17,7 @@ Normal number range, 34 significant digits:
 
 Subnormal number range (non-zero, between 1 and 19 significant digits):
 
-**1.0e-8211** to **9.999,999,999,999,999,999e-8192**
+**1.0e-8210** to **9.999,999,999,999,999,999e-8192**
 
 (hexadecimal _1_ to _8AC72304 89E7FFFF_)
 
