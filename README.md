@@ -91,7 +91,9 @@ Multiply `m` by _1e16_ to read the actual mantissa value
 Alternative Format
 ==================
 
-This is intended for easy conversion between decimalsense numbers and decimal representation on platforms without 128 bit number support.
+This format provides more precision than regular decimalsense numbers on platforms without 128 bit number support.
+It is essentially identical to Decimalsense with 64 bit worth of extra precision (except subnormal numbers).
+
 This alternative format is monotonic and the uniqueness of number representation is preserved.
 
 ~~~
@@ -112,7 +114,7 @@ llllllll llllllll llllllll llllllll llllllll llllllll llllllll llllllll
    `l` = 64 bits for the last 19 decimal digits of mantissa
 
 * If `e` is all 0 then it is a subnormal number (**word 1** value ignoring the sign bit is _0_)
-* If `e` and the first 5 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
+* If `e` is all 1 and the first bit of `h` is 1 then it is an _Infinity_ or _NaN_
 
 Normal numbers
 --------------
