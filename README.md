@@ -11,13 +11,13 @@ Numbers
 
 Normal number range, 35 significant digits:
 
-**1.0e-512** to **9.99...99e+511**
+**1.0e-511** to **9.99...99e+510**
 
-(hexadecimal _1ED09 BEAD87C0 378D8E64 00000000_ to _7FF34261 72C74D82 2B878FE7 FFFFFFFF_)
+(hexadecimal _11ED09 BEAD87C0 378D8E64 00000000_ to _7FD34261 72C74D82 2B878FE7 FFFFFFFF_)
 
 Subnormal number range (non-zero, between 1 and 19 significant digits):
 
-**1.0e-531** to **9.999,999,999,999,999,999e-513**
+**1.0e-530** to **9.999,999,999,999,999,999e-512**
 
 (hexadecimal _1_ to _8AC72304 89E7FFFF_)
 
@@ -63,7 +63,7 @@ mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm
    
    `m` = 117-bit mantissa
 
- * If `e` and the first 53 bits of `m` are all 0 then it is a subnormal number
+ * If `e` is all 0 then it is a subnormal number (the first 53 bits of `m` are also 0)
  * If `e` and the first 5 bits of `m` are all 1 then it is an _Infinity_ or _NaN_
 
 For platforms that don't natively support 128 bit quantities, an alternative format can be used - [see below](#alternative-format).
@@ -84,7 +84,7 @@ Subnormal numbers
 
 Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999_;
 
-Multiply `m` by _1e15_ to read the actual mantissa value
+Multiply `m` by _1e16_ to read the actual mantissa value
 
 ----
 
@@ -93,11 +93,6 @@ Alternative Format
 
 This is intended for easy conversion between decimalsense numbers and decimal representation on platforms without 128 bit number support.
 This alternative format is monotonic and the uniqueness of number representation is preserved.
-The precision remains the same but the exponent range is reduced:
-
-Normal numbers from **1.0e-511** to **9.99...99e+510**
-
-Subnormal numbers from **1.0e-530** to **9.999,999,999,999,999,999e-512**
 
 ~~~
 seeeeeee eeehhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
@@ -151,4 +146,4 @@ Subnormal numbers
  * Exponent is _-512_
  * Mantissa goes from _10,000,000,000,000,000_ to _9.999,999,999,999,999,999e34_ (non-zero mantissa)
 
- Multiply `h` by _1e16_ to read the actual value of the mantissa
+ Multiply `l` by _1e16_ to read the actual value of the mantissa
