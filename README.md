@@ -92,28 +92,32 @@ Alternative Format
 ==================
 
 This is intended for easy conversion between decimalsense numbers and decimal representation on platforms without 128 bit number support.
-This alternative format is _not_ monotonic but the uniqueness of number representation is preserved.
+This alternative format is monotonic and the uniqueness of number representation is preserved.
+The precision remains the same but the exponent range is reduced:
+
+Normal numbers from **1.0e-511** to **9.99...99e+510**
+
+Subnormal numbers from **1.0e-530** to **9.999,999,999,999,999,999e-512**
 
 ~~~
-shhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
-eeeeeeee eellllll llllllll llllllll llllllll llllllll llllllll llllllll
+seeeeeee eeehhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh hhhhhhhh
+llllllll llllllll llllllll llllllll llllllll llllllll llllllll llllllll
 ~~~
 
 **Word 1:**
 
    `s` = sign bit
    
-   `h` = 63 bits for the first 19 decimal digits of mantissa
+   `e` = 10-bit exponent
+
+   `h` = 53 bits for the first 16 decimal digits of mantissa
 
 **Word 2:**
    
-   `e` = 10-bit exponent
+   `l` = 64 bits for the last 19 decimal digits of mantissa
 
-   `l` = 54 bits for the last 16 decimal digits of mantissa
-
-* If the first 15 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
-* If `e` is all 0 and the first two bits of `l` are 1 then it is a subnormal number
-(**word 2** value is hexadecimal _300000 00000000_ or _310000 00000000_)
+* If `e` is all 0 then it is a subnormal number (**word 1** value ignoring the sign bit is _0_)
+* If `e` and the first 5 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
 
 Normal numbers
 --------------
@@ -123,28 +127,28 @@ Normal numbers
 
 Take _512_ away from the 10-bit exponent value to read the actual exponent;
 
-Multiply `h` by _1e16_ then add _1e34_ to get the first 19 digits of the mantissa;
+Multiply `h` by _1e19_ then add _1e34_ to get the first 16 digits of the mantissa;
 
-Add `l` to fill in the last 16 digits of the mantissa
+Add `l` to fill in the last 19 digits of the mantissa
 
 Examples:
 
 > One = hexadecimal
 > ~~~
+> 40000000 00000000
 > 00000000 00000000
-> 80000000 00000000
 > ~~~
 >
 > Two = hexadecimal
 > ~~~
-> 0DE0B6B3 A7640000
-> 80000000 00000000
+> 402386F2 6FC10000
+> 00000000 00000000
 > ~~~
 
 Subnormal numbers
 -----------------
 
  * Exponent is _-512_
- * Mantissa goes from _1,000,000,000,000,000_ to _9.999,999,999,999,999,999e33_ (non-zero mantissa)
+ * Mantissa goes from _10,000,000,000,000,000_ to _9.999,999,999,999,999,999e34_ (non-zero mantissa)
 
-Copy bit 48 of **word 2** into bit 63 of **word 1** then multiply **word 1** by _1e15_ to read the actual value of the mantissa
+ Multiply `h` by _1e16_ to read the actual value of the mantissa
