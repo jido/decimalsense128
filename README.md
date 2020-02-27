@@ -13,7 +13,7 @@ Normal number range, 35 significant digits:
 
 **1.0e-511** to **9.99...99e+510**
 
-(hexadecimal _11ED09 BEAD87C0 378D8E64 00000000_ to _7FD34261 72C74D82 2B878FE7 FFFFFFFF_)
+(hexadecimal _21ED09 BEAD87C0 378D8E64 00000000_ to _7FD34261 72C74D82 2B878FE7 FFFFFFFF_)
 
 Subnormal number range (non-zero, between 1 and 19 significant digits):
 
@@ -91,8 +91,8 @@ Multiply `m` by _1e16_ to read the actual mantissa value
 Alternative Format
 ==================
 
-This format provides more precision than regular decimalsense numbers on platforms without 128 bit number support.
-It is essentially identical to Decimalsense with 64 bit worth of extra precision (except subnormal numbers).
+This format is intended for use on platforms without 128 bit number support.
+It is essentially identical to 64-bit Decimalsense format with another 64 bits worth of extra precision (subnormal numbers excluded).
 
 This alternative format is monotonic and the uniqueness of number representation is preserved.
 
