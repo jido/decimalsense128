@@ -11,15 +11,15 @@ Numbers
 
 Normal number range, 35 significant digits:
 
-**1.0e-511** to **9.99...99e+510**
+**1.0e-512** to **9.99...99e+511**
 
-(hexadecimal _21ED09 BEAD87C0 378D8E64 00000000_ to _7FD34261 72C74D82 2B878FE7 FFFFFFFF_)
+(hexadecimal _1ED09 BEAD87C0 378D8E64 00000000_ to _7FF34261 72C74D82 2B878FE7 FFFFFFFF_)
 
-Subnormal number range (non-zero, between 1 and 19 significant digits):
+Subnormal number range (non-zero, between 1 and 34 significant digits):
 
-**1.0e-530** to **9.999,999,999,999,999,999e-512**
+**1.0e-546** to **9.99...99e-513**
 
-(hexadecimal _1_ to _8AC72304 89E7FFFF_)
+(hexadecimal _1_ to _1ED09 BEAD87C0 378D8E63 FFFFFFFF_)
 
 Zero:
 
@@ -63,7 +63,7 @@ mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm mmmmmmmm
    
    `m` = 117-bit mantissa
 
- * If `e` is all 0 then it is a subnormal number (the first 53 bits of `m` are also 0)
+ * If `e` is all 0 and `m` is lesser than _1e34_ then it is a subnormal number
  * If `e` and the first 5 bits of `m` are all 1 then it is an _Infinity_ or _NaN_
 
 For platforms that don't natively support 128 bit quantities, an alternative format can be used - [see below](#alternative-format).
@@ -82,9 +82,7 @@ Subnormal numbers
  * Exponent is _-512_
  * The mantissa encodes numbers between 0.0 and 1.0 with a lower precision
 
-Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999_;
-
-Multiply `m` by _1e16_ to read the actual mantissa value
+Equivalent to 128-bit integers (ignoring the sign bit) from _0_ to _9,999,999,999,999,999,999,999,999,999,999,999_
 
 ----
 
@@ -92,7 +90,8 @@ Alternative Format
 ==================
 
 This format is intended for use on platforms without 128 bit number support.
-It is essentially identical to 64-bit Decimalsense format with another 64 bits worth of extra precision (subnormal numbers excluded).
+It is essentially identical to 64-bit Decimalsense format with another 64 bits worth of extra precision. 
+Subnormal numbers are not supported.
 
 This alternative format is monotonic and the uniqueness of number representation is preserved.
 
@@ -113,10 +112,9 @@ llllllll llllllll llllllll llllllll llllllll llllllll llllllll llllllll
    
    `l` = 64 bits for the last 19 decimal digits of mantissa
 
-* If `e` is all 0 then it is a subnormal number (**word 1** value ignoring the sign bit is _0_)
-* If `e` is all 1 and the first bit of `h` is 1 then it is an _Infinity_ or _NaN_
+* If `e` is all 1 and the first 11 bits of `h` are all 1 then it is an _Infinity_ or _NaN_
 
-Normal numbers
+Number format
 --------------
 
  * Exponent is offset by _512_
@@ -141,11 +139,9 @@ Examples:
 > 402386F2 6FC10000
 > 00000000 00000000
 > ~~~
-
-Subnormal numbers
------------------
-
- * Exponent is _-512_
- * Mantissa goes from _10,000,000,000,000,000_ to _9.999,999,999,999,999,999e34_ (non-zero mantissa)
-
- Multiply `l` by _1e16_ to read the actual value of the mantissa
+>
+> Infinity = hexadecimal
+> ~~~
+> 7FFFFC00 00000000
+> 00000000 00000000
+> ~~~
